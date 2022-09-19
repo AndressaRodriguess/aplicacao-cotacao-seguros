@@ -5,11 +5,11 @@ module.exports = {
   async process(request, response) {
     try {
       if (request.body.hasOwnProperty('bem') && request.body.hasOwnProperty('valor_do_bem')) {
-        const cotacao = cotarSeguro(request.body.bem, request.body.valor_do_bem)
+        const cotacao = cotarSeguro(request.body.bem, request.body.valor_do_bem);
         response.status(200).json(cotacao);
       }
       else {
-        res.status(400).send("Objeto de requisição deve conter atributo bem e valor_do_bem");
+        response.status(400).send("Objeto de requisição deve conter atributo bem e valor_do_bem");
       }
     } catch (error) {
       response.status(400).send(error);
