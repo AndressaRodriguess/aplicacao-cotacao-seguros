@@ -1,10 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const UsuarioRoutes = require("./src/routes/v1/UsuarioRouter");
+const CotacaoRoutes = require("./src/routes/v1/CotacaoRouter");
 const app = express();
 
 app.use(bodyParser.json());
 
-app.get('/api/v1/', (req, res) => res.send('Ok!'));
+app.use('/api/v1/', UsuarioRoutes)
+app.use('/api/v1/', CotacaoRoutes)
 
 module.exports = app;

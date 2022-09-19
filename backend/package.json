@@ -12,9 +12,12 @@
   "author": "Andressa Rodrigues",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.2",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "sequelize": "^6.23.0",
+    "sqlite3": "^5.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
