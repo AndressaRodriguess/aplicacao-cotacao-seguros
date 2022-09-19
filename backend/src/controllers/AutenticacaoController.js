@@ -1,4 +1,5 @@
 const UsuarioService = require("../services/UsuarioService");
+const AutenticacaoService = require("../services/AutenticacaoService");
 
 module.exports = {
   async doLogin(req, res) {
@@ -10,13 +11,13 @@ module.exports = {
           throw new Error();
         }
 
-        const authenticated = await utils.comparePwd(req.body.password, userLogin.password);
+        const authenticated = await AutenticacaoService.comparePwd(req.body.password, userLogin.password);
 
         if (!authenticated) {
           throw new Error();
         }
 
-        const token = utils.signJwt(userLogin._id);
+        const token = AutenticacaoService.signJwt(userLogin._id);
         res.set('Authorization', `Bearer ${token}`);
         res.status(200).json({
           user: userLogin,

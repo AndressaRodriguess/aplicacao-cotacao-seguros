@@ -1,9 +1,12 @@
 const Usuario = require("../models/UsuarioModel");
+const AutenticacaoService = require("../services/AutenticacaoService");
 
 module.exports = {
   async create(request, response) {
     try {
-      const usuario = await Usuario.create(request.body);
+      const user = { ...request.body }
+      user.password = await AutenticacaoService.encryptPwd(request.body.password)
+      const usuario = await Usuario.create(user);
       const dataUser = {
         id: usuario.id,
         nome: usuario.nome,
