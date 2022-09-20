@@ -21,7 +21,7 @@
             flat
             class="full-width"
             size="md"
-            href="/cadastre-se"
+            @click="$router.replace('/cadastre-se')"
           />
       </div>
       </div>
