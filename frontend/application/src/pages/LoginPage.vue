@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { storeToRefs } from 'pinia'
+import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -41,9 +43,13 @@ export default defineComponent({
       password: ''
     })
 
+    const userStore = useUserStore()
+    const { user } = storeToRefs(userStore)
+    console.log(user)
     return {
       form
     }
   }
 })
+
 </script>

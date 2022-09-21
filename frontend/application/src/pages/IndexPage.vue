@@ -25,6 +25,9 @@
 
 <script>
 import { ref } from 'vue'
+import { api } from 'boot/axios'
+import { useQuasar } from 'quasar'
+
 const columns = [
   {
     name: 'name',
@@ -149,10 +152,28 @@ const rows = [
 
 export default {
   setup () {
+    const $q = useQuasar()
+    const data = ref(null)
+
+    function loadData () {
+      api.get('/api/v1/')
+        .then((response) => {
+          data.value = response.data
+        })
+        .catch(() => {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Loading failed',
+            icon: 'report_problem'
+          })
+        })
+    }
     return {
       columns,
       rows,
-      loading: ref(false)
+      loading: ref(false),
+      loadData
     }
   }
 }

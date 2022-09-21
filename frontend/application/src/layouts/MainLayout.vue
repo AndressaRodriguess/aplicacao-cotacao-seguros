@@ -2,13 +2,12 @@
   <q-layout view="hHh lpR lFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-toolbar-title  href="/" clickable>
+        <q-btn dense flat round icon="home" class="q-mr-sm" to="/" />
+        <q-toolbar-title>
           Cotação Seguro
         </q-toolbar-title>
-
         <q-btn dense flat round icon="account_circle" size="lg" @click="toggleRightDrawer" />
       </q-toolbar>
-
     </q-header>
 
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
@@ -31,9 +30,9 @@
             <q-avatar size="56px" class="q-mb-sm">
               <img src="https://cdn-icons-png.flaticon.com/512/3899/3899618.png">
             </q-avatar>
-            <div class="text-weight-bold">Razvan Stoenescu</div>
-            <div>@rstoenescu</div>
-            <div>11900000</div>
+            <div class="text-weight-bold">{{user.nome}}</div>
+            <div>{{user.email}}</div>
+            <div>{{user.telefone}}</div>
           </div>
         </q-img>
     </q-drawer>
@@ -46,6 +45,8 @@
 </template>
 
 <script>
+import { storeToRefs } from 'pinia'
+import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -53,12 +54,15 @@ export default defineComponent({
 
   setup () {
     const rightDrawerOpen = ref(false)
+    const userStore = useUserStore()
+    const { user } = storeToRefs(userStore)
 
     return {
       rightDrawerOpen,
       toggleRightDrawer () {
         rightDrawerOpen.value = !rightDrawerOpen.value
-      }
+      },
+      user
     }
   }
 })

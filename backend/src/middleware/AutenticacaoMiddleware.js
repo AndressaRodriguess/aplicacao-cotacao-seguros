@@ -10,7 +10,6 @@ module.exports = {
     const token = bearerHeader.replace('Bearer ',''); 
 
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
-      console.log(err)
       if (err) return res.status(401).send({ auth: false, message: 'Falha na autenticação do token. Token inválido ou expirado.' });
       req.user_id = decoded.id;
       next();
