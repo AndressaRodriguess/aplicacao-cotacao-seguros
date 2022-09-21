@@ -30,9 +30,4 @@ module.exports = {
       res.status(400).send("Senha e/ou usuário incorretos");
     }
   },
-
-  doLogout(req, res) {
-    res.set('Authorization', `Bearer `);
-    res.status(200).send();
-  },
 }

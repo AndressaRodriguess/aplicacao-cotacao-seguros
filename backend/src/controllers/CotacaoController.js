@@ -4,12 +4,12 @@ const { cotarSeguro } = require("../services/CotacaoService");
 module.exports = {
   async process(request, response) {
     try {
-      if (request.body.hasOwnProperty('bem') && request.body.hasOwnProperty('valor_do_bem')) {
-        const cotacao = cotarSeguro(request.body.bem, request.body.valor_do_bem);
+      if (request.body.hasOwnProperty('bem') && request.body.hasOwnProperty('valor_do_bem') && request.body.hasOwnProperty('quantidade_parcelas')) {
+        const cotacao = cotarSeguro(request.body.bem, request.body.valor_do_bem, request.body.quantidade_parcelas);
         response.status(200).json(cotacao);
       }
       else {
-        response.status(400).send("Objeto de requisição deve conter atributo bem e valor_do_bem");
+        response.status(400).send("Objeto de requisição deve conter atributo bem, quantidade_parcelas e valor_do_bem");
       }
     } catch (error) {
       response.status(400).send(error);
