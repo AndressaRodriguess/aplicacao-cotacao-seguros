@@ -1,10 +1,14 @@
 const Usuario = require("../models/UsuarioModel");
 const AutenticacaoService = require("../services/AutenticacaoService");
+const UsuarioService = require("../services/UsuarioService");
 
 module.exports = {
   async create(request, response) {
     try {
       const user = { ...request.body }
+      if ( await UsuarioService.getByEmail(user.email) ){
+        return response.status(409).send("E-mail informado já possui cadastro vinculado.");
+      } 
       user.password = await AutenticacaoService.encryptPwd(request.body.password)
       const usuario = await Usuario.create(user);
       const dataUser = {
