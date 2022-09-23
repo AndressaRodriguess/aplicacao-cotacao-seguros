@@ -15,7 +15,7 @@
           <q-list padding>
             <q-item active clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="logout" />
+                <q-icon name="logout" to='/login' />
               </q-item-section>
 
               <q-item-section>
@@ -25,16 +25,11 @@
           </q-list>
         </q-scroll-area>
 
-        <q-img class="absolute-top" src="https://img.freepik.com/free-photo/glitch-effect-black-background_53876-129025.jpg?w=1380&t=st=1663643889~exp=1663644489~hmac=48ee1149075af4c7da066a6e2f7da5d3314d7919ccd9ae8b2a92f4805e79ea7a" style="height: 150px">
-          <div class="absolute-bottom bg-transparent">
-            <q-avatar size="56px" class="q-mb-sm">
-              <img src="https://cdn-icons-png.flaticon.com/512/3899/3899618.png">
-            </q-avatar>
-            <div class="text-weight-bold">{{user.nome}}</div>
-            <div>{{user.email}}</div>
-            <div>{{user.telefone}}</div>
-          </div>
-        </q-img>
+        <div class="absolute-top bg-indigo-1 q-pa-lg text-black" style="height: 100px">
+          <div class="text-weight-bold">{{user.nome}}</div>
+          <div>{{user.email}}</div>
+          <div>{{user.telefone}}</div>
+        </div>
     </q-drawer>
 
     <q-page-container>
@@ -45,7 +40,6 @@
 </template>
 
 <script>
-import { storeToRefs } from 'pinia'
 import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref } from 'vue'
 
@@ -55,7 +49,7 @@ export default defineComponent({
   setup () {
     const rightDrawerOpen = ref(false)
     const userStore = useUserStore()
-    const { user } = storeToRefs(userStore)
+    const user = userStore.getUser
 
     return {
       rightDrawerOpen,

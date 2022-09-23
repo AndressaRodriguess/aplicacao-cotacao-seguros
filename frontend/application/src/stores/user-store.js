@@ -4,9 +4,9 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
       id: '',
-      nome: 'andressa',
-      email: 'email@',
-      telefone: '11900000'
+      nome: '',
+      email: '',
+      telefone: ''
     },
     token: ''
   }),

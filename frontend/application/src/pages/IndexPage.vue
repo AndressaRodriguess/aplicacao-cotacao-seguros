@@ -8,7 +8,7 @@
         class="my-sticky-header-table"
         color="primary"
         title="Minhas Cotações"
-        :rows="rows"
+        :rows="cotacoes"
         :columns="columns"
         :loading="loading"
         row-key="name"
@@ -24,156 +24,112 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
+import { useUserStore } from 'src/stores/user-store'
 
+const cotacoes = ref([])
 const columns = [
   {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
+    id: 'id',
+    name: 'id',
+    required: false,
     align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
+    visible: false,
+    field: row => row.id,
     sortable: true
   },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-]
-
-const rows = [
   {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
+    id: 'valor_do_bem',
+    name: 'valor_do_bem',
+    required: true,
+    align: 'left',
+    lebel: 'Valor do bem',
+    field: row => row.valor_do_bem,
+    sortable: true
   },
   {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
+    id: 'valor_total_seguro',
+    name: 'valor_total_seguro',
+    required: true,
+    align: 'left',
+    lebel: 'Valor do bem',
+    field: row => row.valor_total_seguro,
+    sortable: true
   },
   {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
+    id: 'quantidade_parcelas',
+    name: 'quantidade_parcelas',
+    required: true,
+    align: 'left',
+    lebel: 'Valor do bem',
+    field: row => row.quantidade_parcelas,
+    sortable: true
   },
   {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
+    id: 'usuario_id',
+    name: 'usuario_id',
+    required: false,
+    visible: false
   },
   {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
+    id: 'valor_parcela_seguro',
+    required: true,
+    align: 'left',
+    lebel: 'Valor parcela',
+    field: row => row.valor_parcela_seguro,
+    sortable: true
   },
   {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
+    id: 'createdAt',
+    name: 'createdAt',
+    required: true,
+    visible: false
   },
   {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
+    id: 'updatedAt',
+    name: 'updatedAt',
+    required: true,
+    visible: false
   }
 ]
 
 export default {
   setup () {
     const $q = useQuasar()
-    const data = ref(null)
+    const userStore = useUserStore()
+    const token = userStore.getToken
+    const user = userStore.getUser
 
-    function loadData () {
-      api.get('/api/v1/')
-        .then((response) => {
-          data.value = response.data
+    onMounted(() => {
+      getColecoes()
+    })
+
+    const getColecoes = async () => {
+      try {
+        console.log(token)
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+        console.log(user)
+        const { data } = await api.get('/api/v1/cotacao/' + user.id, config)
+        getColecoes.value = data
+      } catch (error) {
+        console.log(error)
+
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Erro ao obter cotações salvas :(',
+          icon: 'report_problem'
         })
-        .catch(() => {
-          $q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Loading failed',
-            icon: 'report_problem'
-          })
-        })
+      }
     }
     return {
       columns,
-      rows,
       loading: ref(false),
-      loadData
+      cotacoes
     }
   }
 }
