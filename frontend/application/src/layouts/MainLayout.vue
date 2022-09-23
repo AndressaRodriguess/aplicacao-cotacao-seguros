@@ -13,9 +13,9 @@
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
           <q-list padding>
-            <q-item active clickable v-ripple>
+            <q-item active clickable v-ripple @click="logout" >
               <q-item-section avatar>
-                <q-icon name="logout" to='/login' />
+                <q-icon name="logout"/>
               </q-item-section>
 
               <q-item-section>
@@ -42,6 +42,7 @@
 <script>
 import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -50,13 +51,21 @@ export default defineComponent({
     const rightDrawerOpen = ref(false)
     const userStore = useUserStore()
     const user = userStore.getUser
+    const router = useRouter()
+
+    function logout () {
+      router.push({
+        name: 'login'
+      })
+    }
 
     return {
       rightDrawerOpen,
       toggleRightDrawer () {
         rightDrawerOpen.value = !rightDrawerOpen.value
       },
-      user
+      user,
+      logout
     }
   }
 })

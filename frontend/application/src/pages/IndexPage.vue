@@ -32,63 +32,57 @@ import { useUserStore } from 'src/stores/user-store'
 const cotacoes = ref([])
 const columns = [
   {
-    id: 'id',
     name: 'id',
     required: false,
     align: 'left',
     visible: false,
-    field: row => row.id,
+    label: 'ID',
+    field: 'id',
     sortable: true
   },
   {
-    id: 'valor_do_bem',
     name: 'valor_do_bem',
     required: true,
     align: 'left',
-    lebel: 'Valor do bem',
-    field: row => row.valor_do_bem,
+    label: 'Valor do bem',
+    field: 'valor_do_bem',
     sortable: true
   },
   {
-    id: 'valor_total_seguro',
     name: 'valor_total_seguro',
     required: true,
     align: 'left',
-    lebel: 'Valor do bem',
-    field: row => row.valor_total_seguro,
+    label: 'Valor total seguro',
+    field: 'valor_total_seguro',
     sortable: true
   },
   {
-    id: 'quantidade_parcelas',
     name: 'quantidade_parcelas',
     required: true,
     align: 'left',
-    lebel: 'Valor do bem',
-    field: row => row.quantidade_parcelas,
+    label: 'Quantidade parcelas',
+    field: 'quantidade_parcelas',
     sortable: true
   },
   {
-    id: 'usuario_id',
     name: 'usuario_id',
     required: false,
     visible: false
   },
   {
-    id: 'valor_parcela_seguro',
+    name: 'valor_parcela_seguro',
     required: true,
     align: 'left',
-    lebel: 'Valor parcela',
-    field: row => row.valor_parcela_seguro,
+    label: 'Valor parcela',
+    field: 'valor_parcela_seguro',
     sortable: true
   },
   {
-    id: 'createdAt',
     name: 'createdAt',
     required: true,
     visible: false
   },
   {
-    id: 'updatedAt',
     name: 'updatedAt',
     required: true,
     visible: false
@@ -101,23 +95,25 @@ export default {
     const userStore = useUserStore()
     const token = userStore.getToken
     const user = userStore.getUser
-
+    const loading = ref(false)
     onMounted(() => {
       getColecoes()
     })
 
     const getColecoes = async () => {
       try {
+        loading.value = true
         console.log(token)
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         }
         console.log(user)
         const { data } = await api.get('/api/v1/cotacao/' + user.id, config)
-        getColecoes.value = data
+        cotacoes.value = data
+        loading.value = false
       } catch (error) {
         console.log(error)
-
+        loading.value = false
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -128,7 +124,7 @@ export default {
     }
     return {
       columns,
-      loading: ref(false),
+      loading,
       cotacoes
     }
   }
