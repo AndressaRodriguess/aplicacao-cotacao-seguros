@@ -20,6 +20,7 @@
         <q-input
           label="Senha"
           v-model="form.password"
+          type="password"
           lazy-rules :rules="[ val => val && val.length > 0 || 'campo obrigatório']"
         />
         <div class="full-width q-pd-md">
